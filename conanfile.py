@@ -47,5 +47,5 @@ conan_basic_setup()''')
         # some files (e.g. umfpack/umfpack.h) try to include from
         # these without specifying a relative path.
         self.cpp_info.includedirs = ["include", "include/amd", "include/suitesparse"]
-        self.cpp_info.libs = ["libumfpack"]
+        self.cpp_info.libs = ["suitesparseconfig.lib", "libumfpack"]
         self.cpp_info.libdirs = ["lib"]
