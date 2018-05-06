@@ -27,7 +27,18 @@ conan_basic_setup()''')
         cmake.configure(source_folder="suitesparse")
 
         msbuild = MSBuild(self)
-        msbuild.build("SuiteSparseProject.sln")
+        # Usually, MSBuild tries to guess the "configuration" and "platform"
+        # (in Visual Studio Solution/Project terminology) to use for calling
+        # msbuild.exe. E.g. an x86_64 release build will lead to
+        # "configuration" = "Release" and "platform" = "x64", thus calling
+        # msbuild.exe with:
+        #   /p:Configuration=Debug /p:Platform="x64"
+        #
+        # However, the Visual Studio Solutions generated here (by CMake)
+        # will have their platform named "Win32" in case of Conan's arch being
+        # "x86".
+        # => Rewrite the "guess mapping"
+        msbuild.build("SuiteSparseProject.sln", platforms={'x86': 'Win32'})
 
     def package(self):
         # Somehow self.copy("lib/*.lib", dst="lib", keep_path=False) does not copy any file
